@@ -1,20 +1,13 @@
 let addBookCancelled = false;
 
-const content = document.querySelector('.content');
 const addButton = document.querySelector('button.add');
 const closeButton = document.querySelector('button.close');
 const dialog = document.querySelector('dialog');
+const form = document.querySelector('form');
 
 addButton.addEventListener('click', () => dialog.showModal());
 closeButton.addEventListener('click', closeDialog);
 dialog.addEventListener('close', getFormValues);
-
-
-function closeDialog(event) {
-    dialog.close();
-    event.preventDefault(); // prevent form submission
-    addBookCancelled = true;
-}
 
 const myLibrary = [];
 
@@ -24,15 +17,13 @@ function Book(title, author, pages, read) {
     this.author = author;
     this.pages = pages;
     this.read = read;
-    // this.info = function() {
-    //     return `${this.title} by ${this.author}, ${this.pages} pages, ${this.read ? 'read' : 'not read yet'}.`
-    // }
 }
 
 // create function that adds books to library, after creating them with constructor
 function addBookToLibrary(title, author, pages, read) {
     const book = new Book(title, author, pages, read);
     myLibrary.push(book);
+    displayBook(book);
 }
 
 // show books as cards
@@ -48,6 +39,8 @@ function displayBook(book) {
             p.textContent = book[property];
         div.appendChild(p);
     }
+
+    const content = document.querySelector('.content');
     content.appendChild(div);
 }
 
@@ -57,14 +50,14 @@ function getFormValues() {
         return;
     }
 
-    const title = document.querySelector('#title').value;
-    const author = document.querySelector('#author').value;
-    const pages = document.querySelector('#pages').value;
-    const read = document.querySelector('#read').checked;
-    addBookToLibrary(title, author, pages, read);
-    displayBook(myLibrary.slice(-1)[0]); // fastest method to get last element
+    const book = new FormData(form);
+    addBookToLibrary(book.get('title'), book.get('author'), book.get('pages'), book.get('read'));
+    form.reset();
 }
 
-addBookToLibrary('The Lightning Thief', 'Rick Riordan', 350, true);
-addBookToLibrary('The Song of Achilles', 'Madeline Miller', 408, false);
-myLibrary.forEach(displayBook);
+function closeDialog(event) {
+    dialog.close();
+    event.preventDefault(); // prevent form submission
+    form.reset()
+    addBookCancelled = true;
+}
