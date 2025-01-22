@@ -1,6 +1,22 @@
-const content = document.querySelector('.content');
-const myLibrary = [];
+let addBookCancelled = false;
 
+const content = document.querySelector('.content');
+const addButton = document.querySelector('button.add');
+const closeButton = document.querySelector('button.close');
+const dialog = document.querySelector('dialog');
+
+addButton.addEventListener('click', () => dialog.showModal());
+closeButton.addEventListener('click', closeDialog);
+dialog.addEventListener('close', getFormValues);
+
+
+function closeDialog(event) {
+    dialog.close();
+    event.preventDefault(); // prevent form submission
+    addBookCancelled = true;
+}
+
+const myLibrary = [];
 
 // create book constructor
 function Book(title, author, pages, read) {
@@ -19,6 +35,7 @@ function addBookToLibrary(title, author, pages, read) {
     myLibrary.push(book);
 }
 
+// show books as cards
 function displayBook(book) {
     const div = document.createElement('div');
     div.classList.toggle('card');
@@ -32,6 +49,20 @@ function displayBook(book) {
         div.appendChild(p);
     }
     content.appendChild(div);
+}
+
+function getFormValues() {
+    if (addBookCancelled) {
+        addBookCancelled = false;
+        return;
+    }
+
+    const title = document.querySelector('#title').value;
+    const author = document.querySelector('#author').value;
+    const pages = document.querySelector('#pages').value;
+    const read = document.querySelector('#read').checked;
+    addBookToLibrary(title, author, pages, read);
+    displayBook(myLibrary.slice(-1)[0]); // fastest method to get last element
 }
 
 addBookToLibrary('The Lightning Thief', 'Rick Riordan', 350, true);
