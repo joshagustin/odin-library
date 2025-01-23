@@ -31,10 +31,16 @@ function addBookToLibrary(title, author, pages, read) {
 
 // show books as cards
 function displayBook(book) {
+    const div = createCardProperties(book);
+    div.appendChild(createRemoveButton());
+    const content = document.querySelector('.content');
+    content.appendChild(div);
+}
+
+function createCardProperties(book) {
     const div = document.createElement('div');
     div.classList.toggle(`card`);
     div.id = `book-${bookID}`;
-
     for (const property in book) {
         const p = document.createElement('p');
         if (property === 'read')
@@ -46,15 +52,15 @@ function displayBook(book) {
         p.classList.toggle(property);
         div.appendChild(p);
     }
+    return div;
+}
 
+function createRemoveButton() {
     const removeButton = document.createElement('button');
     removeButton.textContent = 'Remove';
     removeButton.classList.toggle('remove');
     removeButton.addEventListener('click', removeBookFromLibrary);
-    div.appendChild(removeButton);
-
-    const content = document.querySelector('.content');
-    content.appendChild(div);
+    return removeButton;
 }
 
 function getFormValues() {
@@ -77,8 +83,9 @@ function closeDialog(event) {
 
 function removeBookFromLibrary(event) {
     // remove element from DOM
-    const targetCard = event.target.parentElement.id;
-    const targetBook = targetCard.split('|')[1];
+    const targetCard = event.target.parentElement;
+    const targetCardID = targetCard.id;
+    const targetBook = targetCardID.split('|')[1];
     targetCard.remove();
 
     // remove element from myLibrary
@@ -87,5 +94,5 @@ function removeBookFromLibrary(event) {
     }
 }
 
-const remove = document.querySelector('.remove');
-remove.addEventListener('click', removeBookFromLibrary);
+const remove = document.querySelectorAll('.remove');
+remove.forEach(button => button.addEventListener('click', removeBookFromLibrary));
