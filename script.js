@@ -8,6 +8,7 @@ const form = document.querySelector('form');
 addButton.addEventListener('click', () => dialog.showModal());
 closeButton.addEventListener('click', closeDialog);
 dialog.addEventListener('close', getFormValues);
+dialog.addEventListener('cancel', closeDialog);
 
 const myLibrary = [];
 let bookID = 0;
@@ -33,6 +34,7 @@ function addBookToLibrary(title, author, pages, read) {
 function displayBook(book) {
     const div = createCardProperties(book);
     div.appendChild(createRemoveButton());
+    div.appendChild(createReadToggle(book.read));
     const content = document.querySelector('.content');
     content.appendChild(div);
 }
@@ -63,6 +65,15 @@ function createRemoveButton() {
     return removeButton;
 }
 
+function createReadToggle(bookIsRead) {
+    const toggle = document.createElement('input')
+    toggle.setAttribute('type', 'checkbox');
+    toggle.addEventListener('change', toggleReadStatus);
+    if (bookIsRead)
+        toggle.setAttribute('checked', '');
+    return toggle;
+}
+
 function getFormValues() {
     if (addBookCancelled) {
         addBookCancelled = false;
@@ -85,12 +96,32 @@ function removeBookFromLibrary(event) {
     // remove element from DOM
     const targetCard = event.target.parentElement;
     const targetCardID = targetCard.id;
-    const targetBook = targetCardID.split('|')[1];
+    const targetBook = Number(targetCardID.split('-')[1]);
     targetCard.remove();
 
     // remove element from myLibrary
     for (let i = 0, length = myLibrary.length; i < length; i++) {
-        if (myLibrary[i].bookID === targetBook) myLibrary.splice[i, 1];
+        if (myLibrary[i].bookID === targetBook) {
+            myLibrary.splice(i, 1);
+            break;
+        } 
+    }
+}
+
+function toggleReadStatus(event) {
+    const targetCard = event.target.parentElement;
+    const targetCardID = targetCard.id;
+    const targetBook = Number(targetCardID.split('-')[1]);
+
+    for (let i = 0, length = myLibrary.length; i < length; i++) {
+        if (myLibrary[i].bookID === targetBook) {
+            const read = !myLibrary[i].read;
+            myLibrary[i].read = read;
+
+            const readIndicator = document.querySelector(`#${targetCardID} .read`);
+            readIndicator.textContent = read ? 'Read' : 'Unread';
+            break;
+        }
     }
 }
 
