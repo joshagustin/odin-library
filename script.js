@@ -67,6 +67,7 @@ function createRemoveButton() {
 
 function createReadToggle(bookIsRead) {
     const toggle = document.createElement('input')
+    toggle.classList.toggle('toggle');
     toggle.setAttribute('type', 'checkbox');
     toggle.addEventListener('change', toggleReadStatus);
     if (bookIsRead)
