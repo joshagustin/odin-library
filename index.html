@@ -13,47 +13,30 @@
     <button type="button" class="add"></button>
   </div>
   <div class="content">
-    <div class="card">
-      <p>Title</p>
-      <p>Author</p>
-      <p>500</p>
-      <p>Read</p>
-      <div class="button-container">
-        <button class="remove">Remove</button>
-        <input type="checkbox">
-      </div>
-    </div>
-    <div class="card" id="here">
-      <p>Title</p>
-      <p>Author</p>
-      <p>500</p>
-      <p class="read">Read</p>
-      <div class="button-container">
-        <button class="remove">Remove</button>
-        <input type="checkbox">
-      </div>
-    </div>
   </div>
   <dialog>
     <form>
       <p>
-        <label for="title">Title</label>
-        <input type="text" id="title" name="title">
+        <label for="title">Title</label><span></span>
+        <input type="text" id="title" name="title" required placeholder="The Lightning Thief">
       </p>
       <p>
-        <label for="author">Author</label>
-        <input type="text" id="author" name="author">
+        <label for="author">Author</label><span></span>
+        <input type="text" id="author" name="author" required placeholder="Rick Riordan">
       </p>
       <p>
-        <label for="pages">Pages</label>
-        <input type="number" id="pages" name="pages">
+        <label for="pages">Pages</label><span></span>
+        <input type="number" id="pages" name="pages" min="1" required placeholder="377">
       </p>
       <p>
-        <label for="read">Read</label>
-        <input type="checkbox" id="read" name="read">
+        Read
+        <input type="checkbox" id="read" class="checkbox" name="read">
+        <label for="read" class="switch"></label>
       </p>
-      <button class="submit" formmethod="dialog">Add</button>
-      <button class="close">Close</button>
+      <div class="form-button-container">
+        <button class="submit" formmethod="dialog">Add</button>
+        <button class="close">Close</button>
+      </div>
     </form>
   </dialog>
 </body>

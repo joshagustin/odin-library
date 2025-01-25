@@ -33,8 +33,7 @@ function addBookToLibrary(title, author, pages, read) {
 // show books as cards
 function displayBook(book) {
     const div = createCardProperties(book);
-    div.appendChild(createRemoveButton());
-    div.appendChild(createReadToggle(book.read));
+    div.appendChild(createCardButtons(book.read));
     const content = document.querySelector('.content');
     content.appendChild(div);
 }
@@ -57,9 +56,18 @@ function createCardProperties(book) {
     return div;
 }
 
+function createCardButtons(bookIsRead) {
+    const buttonContainer = document.createElement('div');
+    buttonContainer.classList.toggle('button-container');
+    buttonContainer.append(createRemoveButton());
+    buttonContainer.append(createReadToggle(bookIsRead));
+    buttonContainer.append(createToggleLabel());
+    return buttonContainer;
+}
+
 function createRemoveButton() {
     const removeButton = document.createElement('button');
-    removeButton.textContent = 'Remove';
+    removeButton.textContent = 'DELETE';
     removeButton.classList.toggle('remove');
     removeButton.addEventListener('click', removeBookFromLibrary);
     return removeButton;
@@ -67,12 +75,20 @@ function createRemoveButton() {
 
 function createReadToggle(bookIsRead) {
     const toggle = document.createElement('input')
-    toggle.classList.toggle('toggle');
+    toggle.classList.toggle('checkbox');
     toggle.setAttribute('type', 'checkbox');
+    toggle.id = `checkbox-${bookID}`;
     toggle.addEventListener('change', toggleReadStatus);
     if (bookIsRead)
         toggle.setAttribute('checked', '');
     return toggle;
+}
+
+function createToggleLabel() {
+    const label = document.createElement('label');
+    label.classList.toggle('switch');
+    label.setAttribute('for', `checkbox-${bookID}`);
+    return label;
 }
 
 function getFormValues() {
@@ -95,7 +111,7 @@ function closeDialog(event) {
 
 function removeBookFromLibrary(event) {
     // remove element from DOM
-    const targetCard = event.target.parentElement;
+    const targetCard = event.target.parentElement.parentElement;
     const targetCardID = targetCard.id;
     const targetBook = Number(targetCardID.split('-')[1]);
     targetCard.remove();
@@ -110,7 +126,7 @@ function removeBookFromLibrary(event) {
 }
 
 function toggleReadStatus(event) {
-    const targetCard = event.target.parentElement;
+    const targetCard = event.target.parentElement.parentElement;
     const targetCardID = targetCard.id;
     const targetBook = Number(targetCardID.split('-')[1]);
 

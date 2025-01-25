@@ -51,6 +51,8 @@ h1, h2, h3, h4, h5, h6 {
   --very-dark-blue: #121417;
   --dark-blue: #262e38;
   --button-orange: #fb7413;
+  --gradient-fallback: rgb(38,46,56);
+  --gradient: linear-gradient(45deg, rgba(38,46,56,1) 0%, rgb(28, 31, 36) 100%); 
   font-family: 'Overpass', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
@@ -61,7 +63,8 @@ body {
 }
 
 .header {
-  background-color: var(--dark-blue);
+  background: var(--gradient-fallback);
+  background: var(--gradient); 
   color: #ffffff;
   display: grid;
   padding: 15px;
@@ -124,22 +127,86 @@ button.add:hover {
 
 dialog {
   margin: revert;
+  width: 350px;
+  height: content;
+  background: var(--gradient-fallback);
+  background: var(--gradient);
+  padding: 15px;
+}
+
+dialog {
+  color: white;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+form > p {
+  display: flex;
+  flex-direction: column;
+}
+
+form > p:last-of-type {
+  align-items: start;
+}
+
+label + span {
+  position: relative;
+}
+
+label + span:before {
+  content: 'Required';
+  font-size: 0.8rem;
+  color: red;
+  top: -22px;
+  left: 260px;
+  position: absolute;
+}
+
+form input {
+  appearance: none;
+  border: none;
+  border-radius: 10px;
+  padding: 5px 15px;
+}
+
+.form-button-container {
+  display: flex;
+  gap: 10px;
+}
+
+.form-button-container button {
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+}
+
+.form-button-container .submit {
+  background: var(--button-orange);
+}
+
+.form-button-container .close {
+  background: red;
 }
 
 .content {
   display: grid;
   justify-content: center;
   /* grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); */
-  grid-template-columns: repeat(3, 300px);
+  grid-template-columns: repeat(auto-fill, 300px);
   grid-auto-rows: 300px;
   gap: 30px;
   background-color: var(--very-dark-blue);
+  padding: 15px;
 }
 
-
 .card {
-  background: rgb(38,46,56);
-  background: linear-gradient(45deg, rgba(38,46,56,1) 0%, rgb(28, 31, 36) 100%); 
+  background: var(--gradient-fallback);
+  background: var(--gradient);
   border-radius: 15px;
   color: white;
   padding: 15px;
@@ -168,5 +235,58 @@ dialog {
 .button-container {
   grid-area: 5 / 1 / 6 / 3;
   justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 15px;
 }
+
+button.remove {
+  color: white;
+  font-size: 0.8rem;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 15px;
+  background: red;
+  user-select: none;
+}
+
+button.remove:hover {
+  cursor: pointer;
+}
+
+.switch {
+position: relative;
+display: inline-block;
+width: 40px;
+height: 20px;
+background-color: rgba(0, 0, 0, 0.25);
+border-radius: 20px;
+transition: all 0.3s;
+user-select: none;
+}
+
+.switch::after {
+content: '';
+position: absolute;
+width: 18px;
+height: 18px;
+border-radius:50%;
+background-color: white;
+top: 1px;
+left: 1px;
+transition: all 0.3s;
+}
+
+.checkbox:checked + .switch::after {
+left : 20px;
+}
+
+.checkbox:checked + .switch {
+background-color: var(--button-orange);
+}
+.checkbox {
+display : none;
+}
+
+
 
